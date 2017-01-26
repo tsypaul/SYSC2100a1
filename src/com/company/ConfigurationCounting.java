@@ -1,23 +1,40 @@
-package com.company;
+package ConfigurationCounting;
 
 import java.util.Scanner;
 
 public class ConfigurationCounting {
     // declare variables
     private static int no_of_nodes, no_of_channels, sum;
-
+    
+    //Calculate factorial, cannot use recursive call for factorial method because of stack overflow
     public static int factorial(int n){
-        return n==1? 1 : factorial(n-1)*n;
-    } //Calculate factorial
-
+        int fac = 1;
+    	if(n==0){
+        	return 1;
+        }else{
+        	for(int i=1; i<=n; i++){
+        		fac*=i;
+        	}
+        	return fac;
+        }
+    } 
+ 
+    // Calculate binomial coefficient
     public static int binomial(int n, int k){
         return k==0? 1 : factorial(n)/factorial(k)/factorial(n-k);
-    } // Calculate binomial coefficient
-
+    } 
+    
     public static void generateCombinations (int Nodes, int currentChannel, int[] combinations){
-        if (currentChannel == no_of_channels-1){
-            combinations[currentChannel] = Nodes; // Assign all the nodes to last channel
-            int binomial = binomial(no_of_nodes,no_of_nodes-combinations[currentChannel]); // Calculate the combination of a specific combination
+    	if (currentChannel == no_of_channels-1){
+        	// Assign all the nodes to last channel
+            combinations[currentChannel] = Nodes; 
+            // Calculate the combination of a specific combination
+            int binomial = 1;
+            int a = no_of_nodes;
+            for(int j : combinations){
+            	binomial *= binomial(a,j);
+            	a = a-j;
+            }
             sum += binomial;
             print(binomial, combinations);
         }else{
@@ -27,6 +44,7 @@ public class ConfigurationCounting {
             }
         }
     }
+    
     // print message method
     public static void print (long numberOfSets, int[] combinations){
         System.out.print(numberOfSets+" set(s) with occupancies: ");
